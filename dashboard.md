@@ -8,7 +8,7 @@ tags: [system-design, progress]
 
 # Dashboard
 
-**Current position:** Arc 2 — Resilience. **Module 6 (circuit breakers, bulkheads, load shedding) ✅ COMPLETE.** Next: Module 7 (queues & async as reliability tools).
+**Current position:** 🎉 **ARC 2 COMPLETE + REP 2 DONE** ([[rep2-thundering-monday]]). **Next: Arc 3 — Scaling, Module 10 (load balancing & traffic management).**
 
 > Note: vault rebuilt 2026-06-13 after the original `~/learning-vault` was lost (home path changed `/Users/ray_cho` → `/Users/raycho`). All concept/case-study notes reconstructed from session context. Obsidian will regenerate its own `.obsidian/` config when the folder is opened as a vault.
 
@@ -17,7 +17,7 @@ tags: [system-design, progress]
 | Arc | Modules | Status |
 |-----|---------|--------|
 | 1 — Foundations | 1–3 | ✅ COMPLETE (M1, M2, M3) — Rep pending |
-| 2 — Resilience | 4–9 | 🟡 M4 ✅, M5 ✅, M6 ✅; M7 next |
+| 2 — Resilience | 4–9 | ✅ COMPLETE (M4–M9) — Rep 2 pending |
 | 3 — Scaling | 10–13 | ⬜ not started |
 | 4 — Operations | 14–17 | ⬜ not started |
 
@@ -41,6 +41,12 @@ tags: [system-design, progress]
 - [[idempotency-keys]] — earned 2026-06-13 (M5): nailed the TOCTOU-in-the-mechanism (SET NX fix, with correct reasoning about Redis per-command vs check-then-act atomicity); reinvented the transactional outbox ("a column indicating email sent") + senior match-rigor-to-stakes instinct. Taught: exactly-once effect = at-least-once + idempotent dedupe, dual-write problem.
 - [[circuit-breaker]] — earned 2026-06-13 (M6): full marks on (a) (retries-during-prolonged-outage → metastable, breaker stops it + shields recovering dep). (b) named the fallback menu; waved off "which deps deserve it" → taught the critical-path-vs-enhancement framework (his "defaults vs error" WAS that distinction). "Slow is worse than down."
 - [[bulkhead]] — earned 2026-06-13 (M6): (a) clean Little's Law starvation mechanism. (b) jumped straight to OLTP/OLAP separation + named Redshift unprompted ("from experience"). Taught: bulkhead within-system (pool split) vs between-systems (OLTP/OLAP); the 3 directions (breaker=downstream, shed=upstream, bulkhead=internal).
+- [[queues-async]] — earned 2026-06-13 (M7): sync/async test solid (3/4; missed photo-resize by lumping accept+process — the M3 split again, re-taught). (b) got the lost-failure-signal problem; taught DLQ + duplicate-delivery. "Adopting a queue is a bundle."
+- [[delivery-guarantees-and-ordering]] — earned 2026-06-13 (M7): clean on the ordering-vs-parallelism diagnosis; reached for partition-by-key. **Key choice: instinctively said user_id → corrected to order_id** (narrowest key capturing the constraint; user_id over-constrains + hot-key risk). Taught: exactly-once is a myth at delivery layer.
+- [[caching-strategies]] — earned 2026-06-13 (M8): (a) write-through fix right → taught invalidate-vs-update (delete safer). (b) celebrity post = hot-key ✅ (taught content-vs-counters split); **wallet balance = the trap** — walked up to "don't cache" then walked back to "short TTL" → taught read-for-display vs read-for-decision (any TTL>0 on the decision path = double-spend, the Rep oversell in wallet costume).
+- [[cache-stampede-and-failure]] — earned 2026-06-13 (M8): (a) stampede mechanism + coalescing fix clean (flagged he didn't know the "how" → taught SET NX lock/leases). (b) cold-cache recovery trap nailed + reached for replication. Taught the 2nd defense (DB load-shedding + gradual warm-up) = reduce-probability AND limit-blast-radius.
+- [[replication-rpo-rto]] — earned 2026-06-13 (M9): (a) replication-lag diagnosis clean; "sticky to a replica" → corrected to read-from-primary-after-write (read-your-writes vs monotonic-reads anomaly family). (b) RPO/RTO classification right (payments=RPO, cache=RTO) → upgraded to "regenerable data opts out of durability entirely". Sync/async replication = consistency-vs-latency.
+- [[failover-split-brain-sharding]] — earned 2026-06-13 (M9): split-brain (a) fully correct (2-node trap, quorum/fencing, connected to his my-k8s etcd impl). Optimistic-vs-pessimistic formalized (the Rep etcd-CAS connection). Sharding (b): diagnosed hot-shard but **picked event_type → recreates hotspot** (low cardinality + skew); taught high-cardinality + even-distribution + composite keys. (Same trap family as M7 partition-key.)
 - [[setting-timeouts]] — partial 2026-06-13 (timeout scenario). Got Inventory timeout + Little's arithmetic + async instinct. **GAP: derives timeouts per-call instead of top-down from budget** — set BankAPI=3s but parent Order→Payment=200ms (budget violation, 100% failure). Taught the Russian-doll/nested derivation. **Re-test with a fresh call-chain: must derive top-down and leave margin.** This is the #1 habit to seat from M3.
 - [[percentiles-vs-averages]] — earned 2026-06-13 (computed the 179ms avg, saw it hid the disaster; reached for stddev → corrected to percentiles)
 - [[sli-slo-sla]] — earned 2026-06-13 (video SLI: found quality dimension; rebuffer/start-failure taught)
@@ -49,7 +55,7 @@ tags: [system-design, progress]
 
 ## Weak spots (open)
 
-- **Percentiles/tail + per-customer segmentation vs gray-failure** — 2026-06-13 quiz Q4: given honest green metrics (99.95%, p99 250ms) + furious heavy customer, he reached for "shallow health check / gray failure" (wrong house — metrics were real, not a /healthz ping). Right answer: p99 hides how bad the slow 1% is + the highest-VOLUME customer lives in the tail + global aggregation hides the bad segment. "Right neighborhood, wrong house." Re-test: green real-request metrics + one unhappy segment → must reach for tail/percentile + segmentation, NOT probe representativeness.
+*(none)*
 
 ## Weak spots (cleared)
 
@@ -58,6 +64,15 @@ tags: [system-design, progress]
 - ~~Jitter~~ — earned 2026-06-11 (shared outage = synchronizer).
 - ~~Peer-relative vs absolute thresholds / bounded automation~~ — **cleared 2026-06-13**: given a fresh costume (latency-based reboot bot), unprompted produced shared-dependency → fleet-wide reboot → outage, and reached for "is it just me?" peer evaluation. Transfer succeeded. (Suspenders reminder given: hard-cap action blast radius, e.g. max_ejection_percent, in addition to peer detection.)
 - ~~Top-down timeout budgeting~~ — **cleared 2026-06-13**: fresh call-chain (mobile feed, 2s budget), derived all three timeouts correctly nested (150→350→500ms, each contains its children, fits budget) unprompted. Also intuited budget slack = retry headroom. λ-vs-L decoupling also cleared same quiz (flat-traffic pool-exhaustion scenario).
+- ~~Percentile-tail + per-customer segmentation~~ — **cleared 2026-06-13** (2nd quiz): green-real-metrics + furious 60%-traffic customer → reached for aggregate-percentile-hides-tail + segmented SLIs, NOT gray-failure. "Aggregation is a form of hiding." Correction from prior quiz transferred.
+- ~~Partition-key choice (user_id→order_id)~~ — **confirmed transferred 2026-06-13**: match-events scenario, picked match_id + correctly named too-coarse (player) / too-fine (event) failures.
+
+## Rep 2 edges (re-test in future quizzes)
+
+- **Match named failure to mechanism present** — assumed split-brain without confirming auto-failover; certain risk was async data-loss/RTO. Re-test: give a 2-node setup, ask risks — should ask "auto-failover?" before naming split-brain.
+- **async ≠ fire-and-forget (payments)** — money needs exactly-once effect, never "forget" the result. Re-test in a payment-async scenario.
+- **immediate vs durable = sort by time-to-effect** — put bulkhead (architectural) in the immediate column. Re-test: triage scenario, must separate config-levers (now) from build-fixes (later).
+- **never destroy state to "reset"** — flush-Redis-with-sessions trap. Re-test: an incident where the tempting action destroys authoritative state.
 
 ## Concepts taught but not yet tested (quiz later)
 
@@ -66,11 +81,13 @@ tags: [system-design, progress]
 - ~~Circuit breaker~~ — **taught & earned 2026-06-13 (M6)**, see recall queue.
 - ~~Idempotency vs atomicity~~ — **CLEARED 2026-06-13 (M5)**: resolved the distinction unprompted, including the colleague-is-wrong scenario.
 - ~~TOCTOU / race needs atomicity~~ — **CLEARED 2026-06-13 (M5)**: identified TOCTOU inside the idempotency mechanism and reached for SET NX / unique-constraint insert unprompted. (3 costumes seen: oversell, idem-key race, GET-then-SET.)
-- **Optimistic vs pessimistic locking** — Rep 1: connected etcd CAS unprompted (strong). Conditional UPDATE = optimistic; FOR UPDATE = pessimistic; optimistic better on hot rows (no held lock). Module 9 deepens.
+- ~~Optimistic vs pessimistic locking~~ — **taught & earned 2026-06-13 (M9)**: formalized as a bet on contention rate; livelock risk for optimistic under high contention. See [[failover-split-brain-sharding]].
+- ~~RPO/RTO~~ — **taught & earned 2026-06-13 (M9)**, see [[replication-rpo-rto]].
 - **Instrument the business question** — Rep 1: undersold custom business SLIs (sell-through, checkout-completion, oversell=0) as "non-technical." Reinforce in Module 16 (observability).
 - **Error attribution** — count only server-attributable (5xx/timeout), not 4xx — defangs the malicious-input ejection attack
 - **Recovery happens under fire** — recovery path must be load-tested (links to off-serving-path)
 - **RPO / RTO** — formally introduced 2026-06-13 in quiz (daily snapshot = 24h RPO; restore time = RTO). Full treatment in Module 9. Re-test the data-loss-vs-availability distinction.
+- **Decompose-first / sync-async boundary** — 2026-06-13 (M7 + quiz): twice swept a must-be-sync step in with async ones (photo-resize lumping; "store original" in video upload). Boundary to seat: sync line = "is the source of truth durable yet / did I keep my promise?", NOT just "does user wait?". Improving; re-test once more.
 
 ## Session log
 
@@ -87,4 +104,9 @@ tags: [system-design, progress]
 - 2026-06-13 · Learn · **M4 COMPLETE (stateless services & externalized state)** → Arc 2 begun. Sticky-session failures, cattle-not-pets, "can't eliminate state only move it", state taxonomy (token/Redis/DB), JWT vs sessions + access/refresh hybrid. Earned: stateless-services, externalized-state.
 - 2026-06-13 · Learn · **M5 COMPLETE (timeouts/retries/idempotency).** Standout: resolved idempotency-vs-atomicity (Rep 1 debt) unprompted; caught TOCTOU inside the idem mechanism (SET NX); reinvented transactional outbox; "exactly-once effect = at-least-once + dedupe". Two Rep re-tests CLEARED. Earned: idempotency, idempotency-keys.
 - 2026-06-13 · Learn · **M6 COMPLETE (circuit breakers, bulkheads, load shedding).** Circuit breaker state machine + "slow is worse than down" + critical-vs-enhancement framework. Bulkhead → OLTP/OLAP (jumped to it unprompted). 3 directions of failure isolation. Load shedding folded in (already owned from M1). Earned: circuit-breaker, bulkhead.
-- 2026-06-13 · Recall · 4-Q mixed Arc 2 quiz. Q1 statelessness ✅ (taught WebSocket connection-vs-state). Q2 idempotency ✅✅ (both mechanisms + added "naturally idempotent"). Q3 circuit-breaker/bulkhead ✅ (sharpened bulkhead = own pool + degrade coda; "slow worse than down" retrieved). Q4 ⚠️ reached for gray-failure instead of percentile-tail/segmentation → new weak spot. Next: M7 (queues & async).
+- 2026-06-13 · Recall · 4-Q mixed Arc 2 quiz. Q1 statelessness ✅ (taught WebSocket connection-vs-state). Q2 idempotency ✅✅ (both mechanisms + added "naturally idempotent"). Q3 circuit-breaker/bulkhead ✅ (sharpened bulkhead = own pool + degrade coda; "slow worse than down" retrieved). Q4 ⚠️ reached for gray-failure instead of percentile-tail/segmentation → new weak spot.
+- 2026-06-13 · Learn · **M7 COMPLETE (queues & async).** 4 decoupling benefits, "does caller need result to continue?" test, sync/async per-sub-operation, the bundle (queue+idempotent+DLQ+pending UX), 3 delivery guarantees ("exactly-once achieved not delivered"), partition-key ordering (user_id→order_id correction). Earned: queues-async, delivery-guarantees-and-ordering.
+- 2026-06-13 · Recall · 4-Q quiz. Q1 percentile/segmentation weak spot **CLEARED** (reached for tail+segmented SLIs, not gray-failure). Q2 ⚠️ over-async'd "store original" → sharpened sync boundary = "source of truth durable yet?" (decompose-first now a tracked weak spot). Q3 double-charge ✅✅. Q4 partition-key (match_id) ✅ correction transferred.
+- 2026-06-13 · Learn · **M8 COMPLETE (caching).** Cache-as-shield, cache-aside, invalidation (TTL/write-through/write-behind; delete>update), read-for-display vs read-for-decision (wallet trap), stampede + leases/SET NX coalescing, cache-death + cold-recovery trap + defense-in-depth. Earned: caching-strategies, cache-stampede-and-failure.
+- 2026-06-13 · Learn · **M9 COMPLETE → ARC 2 RESILIENCE COMPLETE.** RPO/RTO, sync/async replication, read-consistency anomaly family, failover/split-brain/quorum/fencing (2-node trap; connected to his my-k8s etcd), optimistic-vs-pessimistic locking, hot-partition shard keys (event_type trap). Earned: replication-rpo-rto, failover-split-brain-sharding.
+- 2026-06-13 · **REP 2 — "The Thundering Monday"** (Arc 2 capstone). Strong: found all 3 latent risks + ranked worst; clean slow-payment→pool-exhaustion→browsing-frozen cascade; Redis-LRU eviction dual-failure mechanism; sensed flush danger. Edges (→ re-test): name-failure-to-mechanism (split-brain assumed), async≠fire-and-forget, immediate-vs-durable sorting, never-destroy-state. Wrote [[rep2-thundering-monday]]. **27 notes + 3 case studies + 2 reps. Next: Arc 3 / M10 (load balancing).**
