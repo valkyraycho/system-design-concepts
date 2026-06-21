@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "case-studies/gitlab-2017-backup-failure.md",
+                "file": "reps/rep1-the-on-sale.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "gitlab-2017-backup-failure"
+              "title": "rep1-the-on-sale"
             }
           }
         ]
@@ -186,14 +186,22 @@
   },
   "active": "884cedd25669729f",
   "lastOpenFiles": [
+    "reps/rep3-garage-to-planet.md",
+    "concepts/scaling-evolution.md",
+    "concepts/cell-based-architecture.md",
+    "concepts/multi-region.md",
+    "concepts/autoscaling-capacity.md",
+    "concepts/dns-anycast-service-discovery.md",
+    "concepts/load-balancing.md",
+    "dashboard.md",
+    "CLAUDE.md",
+    "curriculum.md",
+    "case-studies/gitlab-2017-backup-failure.md",
     "concepts/backpressure-and-capacity.md",
     "concepts/setting-timeouts.md",
     "concepts/littles-law.md",
     "concepts/utilization-latency-cliff.md",
     "case-studies/aws-s3-2017-outage.md",
-    "concepts/correlated-failure.md",
-    "dashboard.md",
-    "curriculum.md",
-    "CLAUDE.md"
+    "concepts/correlated-failure.md"
   ]
 }

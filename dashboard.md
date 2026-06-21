@@ -8,7 +8,7 @@ tags: [system-design, progress]
 
 # Dashboard
 
-**Current position:** 🎉 **ARC 3 COMPLETE + REP 3 DONE** ([[rep3-garage-to-planet]]). **Next: Arc 4 — Operations, Module 14 (deployment & release engineering).** FINAL ARC.
+**Current position:** 🎉🎉🎉 **CURRICULUM COMPLETE — all 17 modules + 4 Reps done.** REP 4 capstone ([[rep4-capstone-toll]]) finished — derived the full cascade spine from first principles unprompted. **Only the full-curriculum summary remains.** (Maintenance mode after: spaced recall, optional deep-dives, real-world application.)
 
 > Note: vault rebuilt 2026-06-13 after the original `~/learning-vault` was lost (home path changed `/Users/ray_cho` → `/Users/raycho`). All concept/case-study notes reconstructed from session context. Obsidian will regenerate its own `.obsidian/` config when the folder is opened as a vault.
 
@@ -19,7 +19,7 @@ tags: [system-design, progress]
 | 1 — Foundations | 1–3 | ✅ COMPLETE (M1, M2, M3) — Rep pending |
 | 2 — Resilience | 4–9 | ✅ COMPLETE (M4–M9) — Rep 2 pending |
 | 3 — Scaling | 10–13 | ✅ COMPLETE (M10–M13) — Rep 3 pending |
-| 4 — Operations | 14–17 | ⬜ not started |
+| 4 — Operations | 14–17 | ✅ COMPLETE (M14–M17) — Rep 4 pending |
 
 ## Recall queue (concepts with earned notes)
 
@@ -53,6 +53,11 @@ tags: [system-design, progress]
 - [[multi-region]] — earned 2026-06-13 (M12): (a) covered cost/consistency/RTO-RPO/active-active conflicts/partition-by-home → taught "interrogate the requirement (which reason?) not price the request" + "multi-region is a data-model change not infra." (b) read-your-writes-across-regions diagnosis clean (replication lag, no RYW). "CAP/PACELC made physical."
 - [[cell-based-architecture]] — earned 2026-06-13 (M12): (a) containment + evacuation right; sharp catch that global/cross-tenant data resists partitioning (taught: replicate→consistency vs shared→shared-fate). (b) **capacity ✅ but missed rehearsal** — evacuation needs headroom AND continuous practice (Chaos Kong = off-serving-path lesson); named "routing" (plumbing) not rehearsal. Re-test the rehearsal half.
 - [[scaling-evolution]] — earned 2026-06-13 (M13): (a) **senior answer** on premature-sharding (questioned the why, matched cheaper tools, "one DB does more than juniors think + Aurora") → added the 3 reasons sharding-now is actively risky. (b) skew intuition right ("handle the tiny portion differently") → sharpened the WHY (horizontal scale divides by key, hot key indivisible → machine/key mismatch is structural). Twitter fan-out, YouTube DB-scaling order, Discord engine-match.
+- [[deployment-strategies]] — earned 2026-06-13 (M14): (a) rolling-deploy rename mechanism right + **derived expand/contract himself** then doubted it (confidence gap not knowledge gap; taught the dual-write window). (b) blue-green/canary scenarios both correct → sharpened "what risk are you defending against: staging-detectable→blue-green, only-detectable-in-prod→canary." Knight Capital.
+- [[feature-flags-and-rollback]] — earned 2026-06-13 (M14): (a) big-batch-is-riskier clean (debuggability) → added all-or-nothing-rollback + correlated-emergent-bugs + DORA frequency-stability correlation. (b) flag rollout right + **found the deepest pitfall himself** ("permanent side effect") = code-reversible-but-state-isn't. Taught: deploy≠release, optimize MTTR not perfection, flag-system-is-a-dependency.
+- [[kubernetes-as-architecture]] — earned 2026-06-13 (M15, his my-k8s as lens): (a) **liveness-must-not-check-shared-dependency anti-pattern nailed** → connected to the recurring correlated-automation theme (4th sighting: FB DNS/reboot-bot/absolute-ejection/liveness). (b) quorum/consensus precise (odd-node, no-majority-on-even) → added CAP-choice completion (etcd picks C over A, freezes writes; running pods survive = data-plane decoupling). Reconciliation loop = cattle-not-pets automated. Roblox control-plane SPOF.
+- [[observability]] — earned 2026-06-13 (M16): (a) silent-2xx bug class + business-metric cure (orders/min) — **Rep 1 "instrument the business question" debt PAID.** (b) alert-on-what-users-feel + "auto-remediate don't page" instinct → completed with 3-tier framework (page/auto-remediate/dashboard) + "fewer alerts = better detection." Taught: monitoring vs observability, 3 pillars (metrics→traces→logs flow), 4xx-vs-5xx error attribution (debt paid).
+- [[incident-response-postmortems-chaos]] — earned 2026-06-13 (M17, FINAL): (a) mitigate-first-diagnose-later nailed cleanly ("leave logs, roll back, verify, then dig"). (b) chaos = rehearsal/fire-drill clean; precondition half-right (recovery) → completed with observability-to-detect + bounded-blast-radius/abort-switch ("chaos is the last maturity step, validates not replaces"). Note: answered fast & confident, no hedging — confidence now matches competence.
 - [[setting-timeouts]] — partial 2026-06-13 (timeout scenario). Got Inventory timeout + Little's arithmetic + async instinct. **GAP: derives timeouts per-call instead of top-down from budget** — set BankAPI=3s but parent Order→Payment=200ms (budget violation, 100% failure). Taught the Russian-doll/nested derivation. **Re-test with a fresh call-chain: must derive top-down and leave margin.** This is the #1 habit to seat from M3.
 - [[percentiles-vs-averages]] — earned 2026-06-13 (computed the 179ms avg, saw it hid the disaster; reached for stddev → corrected to percentiles)
 - [[sli-slo-sla]] — earned 2026-06-13 (video SLI: found quality dimension; rebuffer/start-failure taught)
@@ -73,12 +78,13 @@ tags: [system-design, progress]
 - ~~Percentile-tail + per-customer segmentation~~ — **cleared 2026-06-13** (2nd quiz): green-real-metrics + furious 60%-traffic customer → reached for aggregate-percentile-hides-tail + segmented SLIs, NOT gray-failure. "Aggregation is a form of hiding." Correction from prior quiz transferred.
 - ~~Partition-key choice (user_id→order_id)~~ — **confirmed transferred 2026-06-13**: match-events scenario, picked match_id + correctly named too-coarse (player) / too-fine (event) failures.
 
-## Rep 2 edges (re-test in future quizzes)
+## Rep 2 edges — ALL CLEARED
 
-- **Match named failure to mechanism present** — assumed split-brain without confirming auto-failover; certain risk was async data-loss/RTO. Re-test: give a 2-node setup, ask risks — should ask "auto-failover?" before naming split-brain. (STILL OPEN)
-- **async ≠ fire-and-forget (payments)** — money needs exactly-once effect, never "forget" the result. Re-test in a payment-async scenario. (STILL OPEN)
-- ~~immediate vs durable = sort by time-to-effect~~ — **CLEARED 2026-06-13** (quiz Q2: deploy-bug startup crash → rollback now / fix durable, correctly killed both distractors incl. "more replicas can't help a startup crash").
-- ~~never destroy state to "reset"~~ — **CLEARED 2026-06-13** (quiz Q3: Kafka delete-topic trap — named data+metadata+offset-identity loss; added consumer-side fix). Transferred from Redis costume to Kafka costume.
+- ~~Match named failure to mechanism present~~ — **CLEARED 2026-06-13** (consolidation quiz Q1: refused "3 nodes = safe", named degrade-to-2 → no quorum → split-brain; "gate promotion on majority, maintain odd quorum, auto-replace failed nodes").
+- ~~async ≠ fire-and-forget (payments)~~ — **CLEARED 2026-06-13** (quiz Q2: payment never fire-and-forget, system needs the outcome; queue→worker→"processing"-until-complete. Add: idempotent worker).
+- ~~immediate vs durable = sort by time-to-effect~~ — CLEARED 2026-06-13 (rollback now / fix durable, killed both distractors).
+- ~~never destroy state to "reset"~~ — CLEARED 2026-06-13 (Kafka delete-topic trap, transferred from Redis costume).
+- ~~evacuation needs rehearsal~~ — **CLEARED 2026-06-13** (consolidation quiz Q3: "frequently exercised or it's just hope").
 
 ## Concepts taught but not yet tested (quiz later)
 
@@ -89,10 +95,10 @@ tags: [system-design, progress]
 - ~~TOCTOU / race needs atomicity~~ — **CLEARED 2026-06-13 (M5)**: identified TOCTOU inside the idempotency mechanism and reached for SET NX / unique-constraint insert unprompted. (3 costumes seen: oversell, idem-key race, GET-then-SET.)
 - ~~Optimistic vs pessimistic locking~~ — **taught & earned 2026-06-13 (M9)**: formalized as a bet on contention rate; livelock risk for optimistic under high contention. See [[failover-split-brain-sharding]].
 - ~~RPO/RTO~~ — **taught & earned 2026-06-13 (M9)**, see [[replication-rpo-rto]].
-- **Instrument the business question** — Rep 1: undersold custom business SLIs (sell-through, checkout-completion, oversell=0) as "non-technical." Reinforce in Module 16 (observability).
-- **Error attribution** — count only server-attributable (5xx/timeout), not 4xx — defangs the malicious-input ejection attack
+- ~~Instrument the business question~~ — **PAID 2026-06-13 (M16)**: silent-2xx + orders/min cure. See [[observability]].
+- ~~Error attribution~~ — **PAID 2026-06-13 (M16)**: 4xx-vs-5xx. See [[observability]].
 - **Recovery happens under fire** — recovery path must be load-tested (links to off-serving-path)
-- **Evacuation needs rehearsal (not just routing/capacity)** — M12 Q2b: got headroom, missed "continuously practice the evacuation or it rots" (Chaos Kong / off-serving-path). Re-test: "what makes a failover capability trustworthy when you need it?"
+- ~~Evacuation needs rehearsal~~ — **CLEARED 2026-06-13** (consolidation quiz Q3).
 - **RPO / RTO** — formally introduced 2026-06-13 in quiz (daily snapshot = 24h RPO; restore time = RTO). Full treatment in Module 9. Re-test the data-loss-vs-availability distinction.
 - **Decompose-first / sync-async boundary** — 2026-06-13 (M7 + quiz): twice swept a must-be-sync step in with async ones (photo-resize lumping; "store original" in video upload). Boundary to seat: sync line = "is the source of truth durable yet / did I keep my promise?", NOT just "does user wait?". Improving; re-test once more.
 
@@ -122,4 +128,10 @@ tags: [system-design, progress]
 - 2026-06-13 · Recall · 4-Q quiz (strongest yet). Q1 ✅ "utilization≠keeping up, queue depth is the only keep-up signal" (even when CPU is the right resource). Q2 ✅ **Rep2 edge CLEARED** (rollback/fix + killed both distractors). Q3 ✅ **Rep2 edge CLEARED** (Kafka delete-topic trap, transferred from Redis costume). Q4 ✅ round-robin + load-aware; added outlier-ejection/deep-health-check for the gray-failure framing. 2 Rep2 edges remain (match-failure-to-mechanism, async≠fire-and-forget).
 - 2026-06-13 · Learn · **M12 COMPLETE (multi-region & HA).** 3 reasons (DR/latency/compliance), speed-of-light wall = CAP/PACELC made physical, active-passive vs active-active vs partition-by-home, eventual-consistency-leaks-into-UX, cell-based architecture (blast radius 1/N, cell-canary, data-that-won't-partition), regional evacuation needs headroom + rehearsal (Chaos Kong). Earned: multi-region, cell-based-architecture.
 - 2026-06-13 · Learn · **M13 COMPLETE → ARC 3 SCALING COMPLETE.** Premature-scaling thesis, Twitter fan-out read/write/hybrid (celebrity=hot key), YouTube DB-scaling order (reads easy/writes hard, shard=last resort), Discord engine-match, skew = universal enemy of horizontal scale (key indivisible). Earned: scaling-evolution.
-- 2026-06-13 · **REP 3 — "From Garage to Planet"** (Arc 3 capstone, grow-the-system format). Stage 1 (Day 1): velocity-vs-scale line drawn well (taught CDN≠premature, simple≠naive). Stage 2 (200K read bottleneck): correct cheapest-first ordering (vertical→replica→cache), flagged fan-out as premature. Stage 3 (40M): sharding key tension, partition-by-home > active-active, hybrid fan-out — **ASKED "is fan-out fair at this stage?" = the Module 13 judgment, now internalized (vs Rep 1's premature reach).** Wrote [[rep3-garage-to-planet]]. **34 notes + 3 case studies + 3 reps. Next: Arc 4 / M14 (deployment) — FINAL ARC.**
+- 2026-06-13 · **REP 3 — "From Garage to Planet"** (Arc 3 capstone, grow-the-system format). Stage 1 (Day 1): velocity-vs-scale line drawn well (taught CDN≠premature, simple≠naive). Stage 2 (200K read bottleneck): correct cheapest-first ordering (vertical→replica→cache), flagged fan-out as premature. Stage 3 (40M): sharding key tension, partition-by-home > active-active, hybrid fan-out — **ASKED "is fan-out fair at this stage?" = the Module 13 judgment, now internalized (vs Rep 1's premature reach).** Wrote [[rep3-garage-to-planet]].
+- 2026-06-13 · Learn · **M14 COMPLETE (deployment & release)** → Arc 4 (FINAL) begun. Deploy=controlled-risk (Knight Capital), strategy ladder (recreate/rolling/blue-green/canary), expand-contract + dual-write for schema, deploy≠release feature flags, rollback-as-design-goal/MTTR, big-batch-is-riskier, code-reversible≠state-reversible. Earned: deployment-strategies, feature-flags-and-rollback.
+- 2026-06-13 · Learn · **M15 COMPLETE (Kubernetes as architecture).** Reconciliation loop = self-healing/cattle automated; primitives-as-patterns table; liveness-not-shared-dependency anti-pattern (4th correlated-automation sighting); control-plane SPOF (Roblox); etcd quorum = CAP C-over-A + data-plane decoupling. Earned: kubernetes-as-architecture.
+- 2026-06-13 · Learn · **M16 COMPLETE (observability).** (+ answered forked readiness-probe q: mostly-local, shared-dep→circuit-breaker-not-readiness.) Monitoring vs observability, 3 pillars, symptom-not-cause alerting + 3-tier (page/auto-remediate/dashboard), 4xx/5xx, silent-2xx + business metrics. **Two Rep-1 debts PAID** (instrument-business-question, error-attribution). Earned: observability.
+- 2026-06-13 · Learn · **M17 COMPLETE → ALL 17 MODULES DONE, ARC 4 COMPLETE.** Incident response (IC role, mitigate-first-diagnose-later), blameless postmortems (human-error=symptom, fix the system), chaos engineering (validates Arcs 1-3, last maturity step, preconditions). Maturity ladder: prevent→detect→respond→learn→rehearse. Earned: incident-response-postmortems-chaos.
+- 2026-06-13 · Recall · **6-Q cross-arc consolidation quiz — 6/6, fast & no hedging.** Q1 split-brain-quorum (Rep2 edge CLEARED), Q2 async≠fire-and-forget (Rep2 edge CLEARED), Q3 cell-rehearsal (edge CLEARED), Q4 L=λW flat-traffic exhaustion + bulkhead/breaker, Q5 blue-green/canary both right, Q6 code-reversible≠state-reversible. **ALL open edges now cleared.** Confidence matches competence.
+- 2026-06-13 · **REP 4 — "The Capstone" (all 4 arcs, Toll surge pricing).** Found risks in all 4 arcs in the opening read; **derived the slow→hold-threads→pool-exhaust→other-zones-starve→global cascade spine from first principles, unprompted** (clearest in-veins evidence). Capstone sharpenings: multiply-two-facts→stampede, name-the-mechanism specificity, business-aware degradation (1.0x-at-peak trap). Wrote [[rep4-capstone-toll]]. **CURRICULUM COMPLETE: 40 notes + 3 case studies + 4 reps.** Next: final summary.
