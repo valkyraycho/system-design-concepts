@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "8ea43edcb6d6e7b6",
+        "id": "82d20cfd1f61963b",
         "type": "tabs",
         "children": [
           {
-            "id": "884cedd25669729f",
+            "id": "ad9e7e4133beaf44",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "reps/rep1-the-on-sale.md",
+                "file": "concepts/littles-law.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "rep1-the-on-sale"
+              "title": "littles-law"
             }
           }
         ]
@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "6d27161a996e7e52",
@@ -94,7 +95,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "case-studies/gitlab-2017-backup-failure.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for gitlab-2017-backup-failure"
+              "title": "Backlinks"
             }
           },
           {
@@ -113,12 +113,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "case-studies/gitlab-2017-backup-failure.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from gitlab-2017-backup-failure"
+              "title": "Outgoing links"
             }
           },
           {
@@ -156,21 +155,30 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "case-studies/gitlab-2017-backup-failure.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of gitlab-2017-backup-failure"
+              "title": "Outline"
+            }
+          },
+          {
+            "id": "da6b45424e69bee9",
+            "type": "leaf",
+            "state": {
+              "type": "claudian-view",
+              "state": {},
+              "icon": "bot",
+              "title": "Claudian"
             }
           }
-        ]
+        ],
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 680.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -184,24 +192,33 @@
       "realclaudian:Open Claudian": false
     }
   },
-  "active": "884cedd25669729f",
+  "active": "ad9e7e4133beaf44",
   "lastOpenFiles": [
-    "reps/rep3-garage-to-planet.md",
+    "case-studies/whatsapp-erlang-actors.md",
+    "concepts/load-balancing.md",
     "concepts/scaling-evolution.md",
-    "concepts/cell-based-architecture.md",
     "concepts/multi-region.md",
+    "concepts/bulkhead.md",
+    "concepts/caching-strategies.md",
+    "concepts/cache-stampede-and-failure.md",
+    "concepts/idempotency-keys.md",
+    "concepts/idempotency.md",
+    "concepts/circuit-breaker.md",
+    "concepts/littles-law.md",
+    "concepts/load-shedding.md",
+    "concepts/retry-storm-and-jitter.md",
+    "concepts/metastable-failure.md",
+    "concepts/utilization-latency-cliff.md",
+    "concepts/correlated-failure.md",
+    "reps/rep1-the-on-sale.md",
+    "reps/rep3-garage-to-planet.md",
+    "concepts/cell-based-architecture.md",
     "concepts/autoscaling-capacity.md",
     "concepts/dns-anycast-service-discovery.md",
-    "concepts/load-balancing.md",
     "dashboard.md",
     "CLAUDE.md",
     "curriculum.md",
     "case-studies/gitlab-2017-backup-failure.md",
-    "concepts/backpressure-and-capacity.md",
-    "concepts/setting-timeouts.md",
-    "concepts/littles-law.md",
-    "concepts/utilization-latency-cliff.md",
-    "case-studies/aws-s3-2017-outage.md",
-    "concepts/correlated-failure.md"
+    "concepts/backpressure-and-capacity.md"
   ]
 }

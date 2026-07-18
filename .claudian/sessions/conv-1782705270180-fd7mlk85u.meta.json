@@ -1,0 +1,23 @@
+{
+  "id": "conv-1782705270180-fd7mlk85u",
+  "providerId": "claude",
+  "title": "Review CPU usage incident discussion",
+  "titleGenerationStatus": "success",
+  "createdAt": 1782705270182,
+  "updatedAt": 1782705314868,
+  "lastResponseAt": 1782705314868,
+  "sessionId": "14f569bc-380e-47ba-8efc-da902eed0634",
+  "providerState": {
+    "providerSessionId": "14f569bc-380e-47ba-8efc-da902eed0634"
+  },
+  "usage": {
+    "model": "opus",
+    "inputTokens": 31,
+    "cacheCreationInputTokens": 2446,
+    "cacheReadInputTokens": 34921,
+    "contextWindow": 1000000,
+    "contextTokens": 37398,
+    "percentage": 4,
+    "contextWindowIsAuthoritative": true
+  }
+}

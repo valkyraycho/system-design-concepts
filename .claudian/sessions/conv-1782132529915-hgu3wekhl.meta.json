@@ -1,0 +1,24 @@
+{
+  "id": "conv-1782132529915-hgu3wekhl",
+  "providerId": "claude",
+  "title": "Compare cache deletion vs updates",
+  "titleGenerationStatus": "success",
+  "createdAt": 1782132529915,
+  "updatedAt": 1782132598926,
+  "lastResponseAt": 1782132598926,
+  "sessionId": "142a445e-a58e-428c-9137-9c36422fe651",
+  "providerState": {
+    "providerSessionId": "142a445e-a58e-428c-9137-9c36422fe651"
+  },
+  "currentNote": "concepts/caching-strategies.md",
+  "usage": {
+    "model": "opus",
+    "inputTokens": 31,
+    "cacheCreationInputTokens": 35086,
+    "cacheReadInputTokens": 0,
+    "contextWindow": 1000000,
+    "contextTokens": 35117,
+    "percentage": 4,
+    "contextWindowIsAuthoritative": true
+  }
+}

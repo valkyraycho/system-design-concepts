@@ -1,0 +1,23 @@
+{
+  "id": "conv-1782128706849-vismlmwa5",
+  "providerId": "claude",
+  "title": "Explain vault reading strategy",
+  "titleGenerationStatus": "success",
+  "createdAt": 1782128706854,
+  "updatedAt": 1782131522906,
+  "lastResponseAt": 1782131522906,
+  "sessionId": "c9667711-3425-4d6f-a3b6-23d94af517aa",
+  "providerState": {
+    "providerSessionId": "c9667711-3425-4d6f-a3b6-23d94af517aa"
+  },
+  "usage": {
+    "model": "opus",
+    "inputTokens": 31,
+    "cacheCreationInputTokens": 3088,
+    "cacheReadInputTokens": 53495,
+    "contextWindow": 1000000,
+    "contextTokens": 56614,
+    "percentage": 6,
+    "contextWindowIsAuthoritative": true
+  }
+}
